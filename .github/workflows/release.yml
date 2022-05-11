@@ -12,9 +12,21 @@ jobs:
   test:
     name: run tests and linters
     uses: kubewarden/github-actions/.github/workflows/reusable-test-policy-rust.yml@v1
+  oidc-token:
+    name: Retrieve OIDC token
+    runs-on: ubuntu-latest
+    outputs:
+      token: ${{ steps.step1.outputs.token }}
+    steps:
+      - id: step1
+        run: |
+        OIDC_TOKEN=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=api://AzureADTokenExchange" | jq -r '.value')
+        echo "::set-output name=token::$OIDC_TOKEN"
 
   release:
-    needs: test
+    needs:
+    - test
+    - oidc-token
     permissions:
       # Required to push to GHCR
       contents: write
@@ -25,7 +37,6 @@ jobs:
     with:
       input-wasm: allow_privilege_escalation_psp
       oci-target: ghcr.io/${{ github.repository_owner }}/policies/allow-privilege-escalation-psp
-      oidc-token: |
-        $(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=api://AzureADTokenExchange" | jq -r '.value')
+      oidc-token: ${{needs.oidc-token.outputs.token}}
     secrets:
       workflow-pat: ${{ secrets.WORKFLOW_PAT }}
