@@ -11,7 +11,7 @@ jobs:
 
   test:
     name: run tests and linters
-    uses: kubewarden/github-actions/.github/workflows/reusable-test-policy-rust.yml@v1
+    uses: raulcabello/github-actions/.github/workflows/reusable-test-policy-rust.yml@v1
 
   release:
     needs: test
@@ -21,10 +21,11 @@ jobs:
       packages: write
       # Required by cosign keyless signing
       id-token: write
-
     uses: kubewarden/github-actions/.github/workflows/reusable-release-policy-rust.yml@v1
     with:
       input-wasm: allow_privilege_escalation_psp
       oci-target: ghcr.io/${{ github.repository_owner }}/policies/allow-privilege-escalation-psp
+      oidc-token: |
+        $(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=api://AzureADTokenExchange" | jq -r '.value')
     secrets:
       workflow-pat: ${{ secrets.WORKFLOW_PAT }}
