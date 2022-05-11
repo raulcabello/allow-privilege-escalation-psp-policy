@@ -21,7 +21,7 @@ jobs:
       packages: write
       # Required by cosign keyless signing
       id-token: write
-    uses: raulcabello/github-actions/.github/workflows/reusable-release-policy-rust.yml@v1
+    uses: kubewarden/github-actions/.github/workflows/reusable-release-policy-rust.yml@v1
     with:
       input-wasm: allow_privilege_escalation_psp
       oci-target: ghcr.io/${{ github.repository_owner }}/policies/allow-privilege-escalation-psp
