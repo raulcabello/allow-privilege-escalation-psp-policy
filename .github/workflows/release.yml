@@ -40,6 +40,6 @@ jobs:
     with:
       input-wasm: allow_privilege_escalation_psp
       oci-target: ghcr.io/${{ github.repository_owner }}/policies/allow-privilege-escalation-psp
-      oidc-token: ${{needs.oidc-token.outputs.token}}
+      oidc-token: faketoken
     secrets:
       workflow-pat: ${{ secrets.WORKFLOW_PAT }}
