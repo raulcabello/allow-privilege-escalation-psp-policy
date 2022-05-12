@@ -19,7 +19,7 @@ jobs:
       id-token: write
     runs-on: ubuntu-latest
     outputs:
-      token: ${{ steps.step1.outputs.token }}
+      token: tokout
     steps:
       - id: step1
         run: |
@@ -40,6 +40,6 @@ jobs:
     with:
       input-wasm: allow_privilege_escalation_psp
       oci-target: ghcr.io/${{ github.repository_owner }}/policies/allow-privilege-escalation-psp
-      oidc-token: faketoken
+      oidc-token: ${{needs.oidc-token.outputs.token}}
     secrets:
       workflow-pat: ${{ secrets.WORKFLOW_PAT }}
