@@ -43,3 +43,4 @@ jobs:
     secrets:
       workflow-pat: ${{ secrets.WORKFLOW_PAT }}
       actions-id-token-request-token: $ACTIONS_ID_TOKEN_REQUEST_TOKEN
+      actions-id-token-request-url: $ACTIONS_ID_TOKEN_REQUEST_URL
